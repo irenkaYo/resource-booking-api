@@ -9,4 +9,5 @@ public class Booking
     public DateTime EndTime { get; set; }
     public BookingStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public Resource Resource { get; set; }
 }
