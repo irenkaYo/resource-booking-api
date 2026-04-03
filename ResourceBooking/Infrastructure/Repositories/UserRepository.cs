@@ -1,13 +1,18 @@
 using Domain.Models;
 using Infrastructure.EntityFrameworkRepository;
 using Infrastructure.InterfacesRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private ResourceBookingContext db;
+    private readonly ResourceBookingContext db;
 
+    public UserRepository(ResourceBookingContext context)
+    {
+        db = context;
+    }
     public async Task CreateUser(User user)
     {
         await db.AddAsync(user);
@@ -17,6 +22,17 @@ public class UserRepository : IUserRepository
     public async Task<User>? GetUserById(Guid userId)
     {
         User? user = await db.Users.FindAsync(userId);
+        return user;
+    }
+    
+    public async Task<bool> ExistsByEmail(string email)
+    {
+        return await db.Users.AnyAsync(u => u.Email == email);
+    }
+    
+    public async Task<User>? GetUserByEmail(string email)
+    {
+        User? user = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
         return user;
     }
 }
