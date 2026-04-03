@@ -9,4 +9,14 @@ public class User
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Booking> Bookings { get; set; }
+
+    public User(string name, string email, string password, UserRole role)
+    {
+        Id = Guid.NewGuid();
+        Name = name;
+        Email = email;
+        Password = password;
+        Role = role;
+        CreatedAt = DateTime.UtcNow;
+    }
 }
