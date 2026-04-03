@@ -4,6 +4,6 @@ namespace Infrastructure.InterfacesRepositories;
 
 public interface IUserRepository
 {
-    public Task<User> CreateUser(User user);
-    public Task EnterToAccount(Guid userId);
+    public Task CreateUser(User user);
+    public Task<User>? GetUserById(Guid userId);
 }
