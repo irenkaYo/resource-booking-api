@@ -7,13 +7,13 @@ namespace Infrastructure.EntityFrameworkRepository;
 
 public class ResourceBookingContext : DbContext
 {
-    DbSet<User> Users { get; set; }
-    DbSet<Resource> Resources { get; set; }
-    DbSet<Booking> Bookings { get; set; }
-    DbSet<Location> Locations { get; set; }
-    DbSet<Category> Categories { get; set; }
-    DbSet<Feature> Features { get; set; }
-    DbSet<ResourceFeature> ResourceFeatures { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Resource> Resources { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Feature> Features { get; set; }
+    public DbSet<ResourceFeature> ResourceFeatures { get; set; }
 
     public ResourceBookingContext(DbContextOptions<ResourceBookingContext> options) : base(options)
     {
