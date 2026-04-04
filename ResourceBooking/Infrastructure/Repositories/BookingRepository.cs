@@ -16,13 +16,18 @@ public class BookingRepository : IBookingRepository
     
     public async Task<List<Booking>> GetBookingsByUserId(Guid userId)
     {
-        List<Booking> bookings = await db.Bookings.Where(x => x.UserId == userId).ToListAsync();
+        List<Booking> bookings = await db.Bookings
+            .Include(x => x.Resource)
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
         return bookings;
     }
 
     public async Task<Booking>? GetBookingById(Guid bookingId)
     {
-        Booking? booking = await db.Bookings.FindAsync(bookingId);
+        Booking? booking = await db.Bookings
+            .Include(x => x.Resource)
+            .FirstOrDefaultAsync(x => x.Id == bookingId);
         return booking;
     }
 
