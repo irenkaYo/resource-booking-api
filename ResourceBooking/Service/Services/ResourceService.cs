@@ -68,7 +68,10 @@ public class ResourceService
     {
         await GetAdminUser(userId);
         Resource resource = await GetResource(resourceId);
-        await _resourceRepository.DeleteResource(resource);
+        if (!resource.IsActive)
+            await _resourceRepository.DeleteResource(resource);
+        else
+            throw new Exception("Resource is already active");
     }
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
