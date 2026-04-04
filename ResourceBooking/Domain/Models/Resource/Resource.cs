@@ -10,4 +10,15 @@ public class Resource
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
     //RowVersion
+
+    public Resource(string name, string description, Guid locationId, Guid categoryId, int capacity)
+    {
+        Id  = Guid.NewGuid();
+        Name = name;
+        Description = description;
+        LocationId = locationId;
+        CategoryId = categoryId;
+        Capacity = capacity;
+        IsActive = true;
+    }
 }
