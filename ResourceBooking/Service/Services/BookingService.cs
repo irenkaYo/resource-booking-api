@@ -35,6 +35,9 @@ public class BookingService
 
     public async Task<BookingDto> CreateBooking(CreateBookingDto dto)
     {
+        if (dto.EndTime <= dto.StartTime)
+            throw new Exception("Invalid booking time");
+        
         Booking booking = new Booking(dto.ResourceId, dto.UserId, dto.StartTime, dto.EndTime);
         await _bookingRepository.CreateBooking(booking);
         return ConvertBookingToBookingDto(booking);
