@@ -7,7 +7,12 @@ namespace Infrastructure.Repositories;
 
 public class ResourceRepository : IResourceRepository
 {
-    private ResourceBookingContext db;
+    private readonly ResourceBookingContext db;
+
+    public ResourceRepository(ResourceBookingContext context)
+    {
+        db = context;
+    }
     
     public async Task<List<Resource>> GetAllResources()
     {
