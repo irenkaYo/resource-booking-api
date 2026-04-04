@@ -73,6 +73,17 @@ public class ResourceService
         else
             throw new Exception("Resource is already active");
     }
+    
+    public async Task<IEnumerable<ResourceDto>> GetResources(ResourceFilterDto filter)
+    {
+        var resources = await _resourceRepository.GetFilteredResources(
+            filter.LocationId,
+            filter.CategoryId,
+            filter.Capacity,
+            filter.FeatureId);
+
+        return resources.Select(r => ConvertResourceToResourceDto(r));
+    }
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
     {

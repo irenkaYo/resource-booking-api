@@ -9,6 +9,7 @@ public class Resource
     public Guid CategoryId { get; set; }
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
+    public List<Feature> Features { get; set; }
     //RowVersion
 
     public Resource(string name, string description, Guid locationId, Guid categoryId, int capacity)
@@ -20,5 +21,6 @@ public class Resource
         CategoryId = categoryId;
         Capacity = capacity;
         IsActive = true;
+        Features = new List<Feature>();
     }
 }

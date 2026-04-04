@@ -43,4 +43,28 @@ public class ResourceRepository : IResourceRepository
         db.Resources.Remove(resource);
         await db.SaveChangesAsync();
     }
+    
+    public async Task<IEnumerable<Resource>> GetFilteredResources(Guid? locationId,
+        Guid? categoryId,
+        int? capacity,
+        Guid? featureId)
+    {
+        var query = db.Resources
+            .Include(r => r.Features)
+            .AsQueryable();
+
+        if (locationId.HasValue)
+            query = query.Where(r => r.LocationId == locationId);
+
+        if (capacity.HasValue)
+            query = query.Where(r => r.Capacity >= capacity);
+
+        if (categoryId.HasValue)
+            query = query.Where(r => r.CategoryId == categoryId);
+
+        if (featureId.HasValue)
+            query = query.Where(r => r.Features.Any(f => f.Id == featureId));
+
+        return await query.ToListAsync();
+    }
 }
