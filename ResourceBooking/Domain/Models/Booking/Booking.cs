@@ -10,4 +10,15 @@ public class Booking
     public BookingStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public Resource Resource { get; set; }
+
+    public Booking(Guid resourceId, Guid userId, DateTime startTime, DateTime endTime)
+    {
+        Id = Guid.NewGuid();
+        ResourceId = resourceId;
+        UserId = userId;
+        StartTime = startTime;
+        EndTime = endTime;
+        Status = BookingStatus.Active;
+        CreatedAt = DateTime.UtcNow;
+    }
 }
