@@ -16,13 +16,17 @@ public class ResourceRepository : IResourceRepository
     
     public async Task<List<Resource>> GetAllResources()
     {
-        List<Resource> resources = await db.Resources.ToListAsync();
+        List<Resource> resources = await db.Resources
+            .Include(x => x.Features)
+            .ToListAsync();
         return resources;
     }
 
     public async Task<Resource>? GetResourceById(Guid resourceId)
     {
-        Resource? resource = await db.Resources.FindAsync(resourceId);
+        Resource? resource = await db.Resources
+            .Include(x => x.Features)
+            .FirstOrDefaultAsync(x  => x.Id == resourceId);
         return resource;
     }
 
