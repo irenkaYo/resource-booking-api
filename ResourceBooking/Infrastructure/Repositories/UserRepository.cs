@@ -21,7 +21,9 @@ public class UserRepository : IUserRepository
 
     public async Task<User>? GetUserById(Guid userId)
     {
-        User? user = await db.Users.FindAsync(userId);
+        User? user = await db.Users
+            .Include(x => x.Bookings)
+            .FirstOrDefaultAsync(x => x.Id == userId);
         return user;
     }
     
@@ -32,7 +34,9 @@ public class UserRepository : IUserRepository
     
     public async Task<User>? GetUserByEmail(string email)
     {
-        User? user = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        User? user = await db.Users
+            .Include(x => x.Bookings)
+            .FirstOrDefaultAsync(u => u.Email == email);
         return user;
     }
 }
