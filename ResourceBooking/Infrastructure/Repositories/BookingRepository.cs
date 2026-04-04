@@ -7,7 +7,12 @@ namespace Infrastructure.Repositories;
 
 public class BookingRepository : IBookingRepository
 {
-    private ResourceBookingContext db;
+    private readonly ResourceBookingContext db;
+
+    public BookingRepository(ResourceBookingContext context)
+    {
+        db = context;
+    }
     
     public async Task<List<Booking>> GetBookingsByUserId(Guid userId)
     {
@@ -15,7 +20,7 @@ public class BookingRepository : IBookingRepository
         return bookings;
     }
 
-    public async Task<Booking>? GetOneBookingById(Guid bookingId)
+    public async Task<Booking>? GetBookingById(Guid bookingId)
     {
         Booking? booking = await db.Bookings.FindAsync(bookingId);
         return booking;
