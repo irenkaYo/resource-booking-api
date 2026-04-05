@@ -10,12 +10,18 @@ public class BookingService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IResourceRepository _resourceRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
+    public BookingService(
+        IBookingRepository bookingRepository, 
+        IUserRepository userRepository, 
+        IResourceRepository resourceRepository, 
+        IUnitOfWork unitOfWork)
     {
         _bookingRepository = bookingRepository;
         _userRepository = userRepository;
+        _resourceRepository = resourceRepository;
         _unitOfWork = unitOfWork;
     }
     
@@ -45,6 +51,10 @@ public class BookingService
         {
             if (dto.EndTime <= dto.StartTime)
                 throw new Exception("Invalid booking time");
+            
+            Resource resource = await GetResource(dto.ResourceId);
+            if (!resource.IsActive)
+                throw new Exception("Resource is not active");
 
             var hasConflict = await _bookingRepository.HasConflict(
                 dto.ResourceId,
@@ -101,6 +111,14 @@ public class BookingService
         if (booking == null)
             throw new Exception("Booking not found");
         return booking;
+    }
+
+    private async Task<Resource> GetResource(Guid resourceId)
+    {
+        Resource? resource = await _resourceRepository.GetResourceById(resourceId);
+        if (resource == null)
+            throw new Exception("Resource not found");
+        return resource;
     }
     
     private async Task GetAdminUser(Guid userId)
