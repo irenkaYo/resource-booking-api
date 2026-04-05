@@ -15,5 +15,7 @@ public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
         builder.Property(a => a.Description)
             .HasMaxLength(250)
             .IsRequired();
+        
+        builder.Property(a => a.RowVersion).IsRowVersion();
     }
 }
