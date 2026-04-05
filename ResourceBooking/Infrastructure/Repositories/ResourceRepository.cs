@@ -1,7 +1,6 @@
 using Domain.Models;
 using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
-using Service.Interfaces;
 using Service.Interfaces.Repositories;
 
 namespace Infrastructure.Repositories;
@@ -37,8 +36,9 @@ public class ResourceRepository : IResourceRepository
         await db.SaveChangesAsync();
     }
 
-    public async Task UpdateResource(Resource resource)
+    public async Task UpdateResource(Resource resource, byte[] rowVersion)
     {
+        db.Entry(resource).Property("RowVersion").OriginalValue = rowVersion;
         db.Resources.Update(resource);
         await db.SaveChangesAsync();
     }

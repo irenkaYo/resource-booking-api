@@ -9,8 +9,17 @@ public class ResourceDto
     public Guid CategoryId { get; set; }
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
+    public byte[] RowVersion { get; set; }
 
-    public ResourceDto(Guid id, string name, string description, Guid locationId, Guid categoryId, int capacity, bool isActive)
+    public ResourceDto(
+        Guid id, 
+        string name, 
+        string description, 
+        Guid locationId, 
+        Guid categoryId, 
+        int capacity, 
+        bool isActive, 
+        byte[] rowVersion)
     {
         Id = id;
         Name = name;
@@ -19,5 +28,6 @@ public class ResourceDto
         CategoryId = categoryId;
         Capacity = capacity;
         IsActive = isActive;
+        RowVersion = rowVersion;
     }
 }

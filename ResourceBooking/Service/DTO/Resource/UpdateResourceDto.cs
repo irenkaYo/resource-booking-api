@@ -7,4 +7,5 @@ public class UpdateResourceDto
     public Guid LocationId { get; set; }
     public Guid CategoryId { get; set; }
     public int Capacity { get; set; }
+    public byte[] RowVersion { get; set; }
 }

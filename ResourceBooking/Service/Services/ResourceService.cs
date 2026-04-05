@@ -1,5 +1,6 @@
 using Domain.Models;
 using Infrastructure.DTO.Resource;
+using Microsoft.EntityFrameworkCore;
 using Service.Interfaces.Repositories;
 
 namespace Service.Services;
@@ -47,7 +48,7 @@ public class ResourceService
         return ConvertResourceToResourceDto(resource);
     }
 
-    public async Task<ResourceDto> UpdateResource(Guid resourceId, Guid userId, UpdateResourceDto resourceDto)
+    public async Task<ResourceDto> UpdateResource(Guid resourceId, Guid userId, UpdateResourceDto resourceDto, byte[] rowVersion)
     {
         await GetAdminUser(userId);
         
@@ -59,7 +60,15 @@ public class ResourceService
         resource.CategoryId = resourceDto.CategoryId;
         resource.Capacity = resourceDto.Capacity;
         
-        await _resourceRepository.UpdateResource(resource);
+        
+        try
+        {
+            await _resourceRepository.UpdateResource(resource, rowVersion);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new Exception("The resource has been modified by another user");
+        }
         return ConvertResourceToResourceDto(resource);
     }
 
@@ -93,7 +102,8 @@ public class ResourceService
             resource.LocationId, 
             resource.CategoryId, 
             resource.Capacity, 
-            resource.IsActive);
+            resource.IsActive,
+            resource.RowVersion);
         return resourceDto;
     }
     
