@@ -1,5 +1,6 @@
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Service.Interfaces;
 using Service.Interfaces.Persistance;
 
 namespace Infrastructure.Persistance;
@@ -16,7 +17,14 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task BeginTransactionAsync()
     {
-        _transaction = await _context.Database.BeginTransactionAsync();
+        var connection = _context.Database.GetDbConnection();
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        var dbTransaction = await connection.BeginTransactionAsync(IsolationLevel.Serializable);
+
+        _transaction = _context.Database.UseTransaction(dbTransaction);
     }
 
     public async Task CommitAsync()

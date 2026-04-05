@@ -1,8 +1,8 @@
 using Domain.Models;
 using Infrastructure.DTO;
-using Infrastructure.EntityFrameworkRepository;
-using Infrastructure.InterfacesRepositories;
 using Microsoft.EntityFrameworkCore;
+using Service.Interfaces.Persistance;
+using Service.Interfaces.Repositories;
 
 namespace Service.Services;
 
@@ -10,13 +10,13 @@ public class BookingService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IUserRepository _userRepository;
-    private readonly ResourceBookingContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     
-    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository, ResourceBookingContext context)
+    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
     {
         _bookingRepository = bookingRepository;
         _userRepository = userRepository;
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<List<BookingDto>> GetBookingsByUserId(Guid userId)
@@ -39,36 +39,37 @@ public class BookingService
 
     public async Task<BookingDto> CreateBooking(CreateBookingDto dto)
     {
-        await using var connection = _context.Database.GetDbConnection();
-        await connection.OpenAsync();
-
-        await using var transaction = await connection.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
-
-        await _context.Database.UseTransactionAsync(transaction);
+        await _unitOfWork.BeginTransactionAsync();
 
         try
         {
             if (dto.EndTime <= dto.StartTime)
                 throw new Exception("Invalid booking time");
-            
-            var hasConflict = await _context.Bookings
-                .AnyAsync(b =>
-                    b.ResourceId == dto.ResourceId &&
-                    b.StartTime < dto.EndTime &&
-                    b.EndTime > dto.StartTime);
-            
+
+            var hasConflict = await _bookingRepository.HasConflict(
+                dto.ResourceId,
+                dto.StartTime,
+                dto.EndTime);
+
             if (hasConflict)
                 throw new Exception("Time slot is already booked");
-            
-            Booking booking = new Booking(dto.ResourceId, dto.UserId, dto.StartTime, dto.EndTime);
+
+            var booking = new Booking(dto.ResourceId, dto.UserId, dto.StartTime, dto.EndTime);
+
             await _bookingRepository.AddBooking(booking);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+
+            await _unitOfWork.CommitAsync();
+
             return ConvertBookingToBookingDto(booking);
+        }
+        catch (DbUpdateException)
+        {
+            await _unitOfWork.RollbackAsync();
+            throw new Exception("Time slot is already booked");
         }
         catch
         {
-            await transaction.RollbackAsync();
+            await _unitOfWork.RollbackAsync();
             throw;
         }
     }
