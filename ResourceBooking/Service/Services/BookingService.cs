@@ -86,7 +86,11 @@ public class BookingService
 
     public async Task CancelBooking(Guid bookingId, Guid userId)
     {
-        await GetAdminUser(userId);
+        User user = await GetUser(userId);
+        bool hasBooking = user.Bookings.Any(x => x.Id == bookingId);
+        if (!hasBooking && user.Role != UserRole.Admin)
+            throw new Exception("You cannot cancel booking");
+        
         Booking booking = await GetBooking(bookingId);
         booking.Status = BookingStatus.Canceled;
         await _bookingRepository.UpdateBooking(booking);
@@ -121,14 +125,13 @@ public class BookingService
         return resource;
     }
     
-    private async Task GetAdminUser(Guid userId)
+    private async Task<User> GetUser(Guid userId)
     {
         var user = await _userRepository.GetUserById(userId);
 
         if (user == null)
             throw new Exception("User not found");
-
-        if (user.Role != UserRole.Admin)
-            throw new Exception("Access denied");
+        
+        return user;
     }
 }
