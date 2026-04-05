@@ -1,11 +1,10 @@
-using Infrastructure.InterfacesRepositories;
-
-namespace Domain.Models;
-
 using System.Security.Cryptography;
 using System.Text;
+using Service.Interfaces.Services;
 
-public class SHA256Convertation : IHashService
+namespace Service.Interfaces;
+
+public class Sha256Convertation : IHashService
 {
     public string Hash(string input)
     {

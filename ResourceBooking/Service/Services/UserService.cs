@@ -1,6 +1,7 @@
 using Domain.Models;
 using Infrastructure.DTO;
-using Infrastructure.InterfacesRepositories;
+using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 

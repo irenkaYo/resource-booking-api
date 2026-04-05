@@ -2,7 +2,7 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.EntityFrameworkRepository.Configurations;
+namespace Infrastructure.Persistance.Configurations;
 
 public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
 {

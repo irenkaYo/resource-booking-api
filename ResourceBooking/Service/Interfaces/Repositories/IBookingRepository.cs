@@ -1,6 +1,6 @@
 using Domain.Models;
 
-namespace Infrastructure.InterfacesRepositories;
+namespace Service.Interfaces.Repositories;
 
 public interface IBookingRepository
 {
@@ -8,4 +8,5 @@ public interface IBookingRepository
     public Task<Booking>? GetBookingById(Guid bookingId);
     public Task AddBooking(Booking booking);
     public Task UpdateBooking(Booking booking);
+    Task<bool> HasConflict(Guid resourceId, DateTime startTime, DateTime endTime);
 }

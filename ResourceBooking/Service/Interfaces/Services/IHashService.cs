@@ -1,4 +1,4 @@
-namespace Infrastructure.InterfacesRepositories;
+namespace Service.Interfaces.Services;
 
 public interface IHashService
 {

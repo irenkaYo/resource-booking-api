@@ -1,8 +1,8 @@
 using Domain.Models;
-using Infrastructure.EntityFrameworkRepository.Configurations;
+using Infrastructure.Persistance.Configurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.EntityFrameworkRepository;
+namespace Infrastructure.Persistance;
 
 public class ResourceBookingContext : DbContext
 {

@@ -1,7 +1,6 @@
-using System.ComponentModel.Design;
 using Domain.Models;
 using Infrastructure.DTO.Resource;
-using Infrastructure.InterfacesRepositories;
+using Service.Interfaces.Repositories;
 
 namespace Service.Services;
 

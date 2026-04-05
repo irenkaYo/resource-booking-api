@@ -1,7 +1,8 @@
 using Domain.Models;
-using Infrastructure.EntityFrameworkRepository;
-using Infrastructure.InterfacesRepositories;
+using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Service.Interfaces;
+using Service.Interfaces.Repositories;
 
 namespace Infrastructure.Repositories;
 
