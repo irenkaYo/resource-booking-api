@@ -1,7 +1,8 @@
 using Domain.Models;
-using Infrastructure.EntityFrameworkRepository;
-using Infrastructure.InterfacesRepositories;
+using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Service.Interfaces;
+using Service.Interfaces.Repositories;
 
 namespace Infrastructure.Repositories;
 
@@ -40,5 +41,14 @@ public class BookingRepository : IBookingRepository
     {
         db.Bookings.Update(booking);
         await db.SaveChangesAsync();
+    }
+    
+    public async Task<bool> HasConflict(Guid resourceId, DateTime startTime, DateTime endTime)
+    {
+        return await db.Bookings
+            .AnyAsync(b =>
+                b.ResourceId == resourceId &&
+                b.StartTime < endTime &&
+                b.EndTime > startTime);
     }
 }
