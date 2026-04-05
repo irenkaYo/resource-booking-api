@@ -39,7 +39,12 @@ public class BookingService
 
     public async Task<BookingDto> CreateBooking(CreateBookingDto dto)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var connection = _context.Database.GetDbConnection();
+        await connection.OpenAsync();
+
+        await using var transaction = await connection.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+
+        await _context.Database.UseTransactionAsync(transaction);
 
         try
         {
