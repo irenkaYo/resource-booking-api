@@ -31,10 +31,9 @@ public class BookingRepository : IBookingRepository
         return booking;
     }
 
-    public async Task CreateBooking(Booking booking)
+    public async Task AddBooking(Booking booking)
     {
         await db.Bookings.AddAsync(booking);
-        await db.SaveChangesAsync();
     }
 
     public async Task UpdateBooking(Booking booking)

@@ -1,6 +1,8 @@
 using Domain.Models;
 using Infrastructure.DTO;
+using Infrastructure.EntityFrameworkRepository;
 using Infrastructure.InterfacesRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Service.Services;
 
@@ -8,11 +10,13 @@ public class BookingService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ResourceBookingContext _context;
     
-    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository)
+    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository, ResourceBookingContext context)
     {
         _bookingRepository = bookingRepository;
         _userRepository = userRepository;
+        _context = context;
     }
     
     public async Task<List<BookingDto>> GetBookingsByUserId(Guid userId)
@@ -35,12 +39,33 @@ public class BookingService
 
     public async Task<BookingDto> CreateBooking(CreateBookingDto dto)
     {
-        if (dto.EndTime <= dto.StartTime)
-            throw new Exception("Invalid booking time");
-        
-        Booking booking = new Booking(dto.ResourceId, dto.UserId, dto.StartTime, dto.EndTime);
-        await _bookingRepository.CreateBooking(booking);
-        return ConvertBookingToBookingDto(booking);
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (dto.EndTime <= dto.StartTime)
+                throw new Exception("Invalid booking time");
+            
+            var hasConflict = await _context.Bookings
+                .AnyAsync(b =>
+                    b.ResourceId == dto.ResourceId &&
+                    b.StartTime < dto.EndTime &&
+                    b.EndTime > dto.StartTime);
+            
+            if (hasConflict)
+                throw new Exception("Time slot is already booked");
+            
+            Booking booking = new Booking(dto.ResourceId, dto.UserId, dto.StartTime, dto.EndTime);
+            await _bookingRepository.AddBooking(booking);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return ConvertBookingToBookingDto(booking);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task CancelBooking(Guid bookingId, Guid userId)
