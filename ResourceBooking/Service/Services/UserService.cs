@@ -33,8 +33,7 @@ public class UserService
         User user = new User(userDto.Name, userDto.Email, hashPassword, role);
         await _userRepository.CreateUser(user);
         
-        UserDto dto = ConvertUserToUserDto(user);
-        return dto;
+        return ConvertUserToUserDto(user);
     }
 
     public async Task<UserDto> Login(EnterUserDto enterUserDto)
@@ -46,6 +45,16 @@ public class UserService
         string hashPassword = ConvertPassword(enterUserDto.Password);
         if (user.Password != hashPassword)
             throw new Exception("The password is entered incorrectly");
+        
+        UserDto dto = ConvertUserToUserDto(user);
+        return dto;
+    }
+
+    public async Task<UserDto> GetUserByID(Guid userId)
+    {
+        User user = await _userRepository.GetUserById(userId);
+        if (user == null)
+            throw new Exception("Invalid ID");
         
         UserDto dto = ConvertUserToUserDto(user);
         return dto;
