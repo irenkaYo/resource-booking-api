@@ -24,7 +24,11 @@ public class UserService
         }
         
         string hashPassword = ConvertPassword(userDto.Password);
-        var role = Enum.Parse<UserRole>(userDto.Role, true);
+        
+        if (!Enum.TryParse<UserRole>(userDto.Role, true, out var role))
+        {
+            throw new ArgumentException("Invalid role");
+        }
         
         User user = new User(userDto.Name, userDto.Email, hashPassword, role);
         await _userRepository.CreateUser(user);
