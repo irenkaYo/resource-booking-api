@@ -3,10 +3,11 @@ using Infrastructure.DTO;
 using Microsoft.EntityFrameworkCore;
 using Service.Interfaces.Persistance;
 using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class BookingService
+public class BookingService : IBookingService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IUserRepository _userRepository;
@@ -94,6 +95,11 @@ public class BookingService
         Booking booking = await GetBooking(bookingId);
         booking.Status = BookingStatus.Canceled;
         await _bookingRepository.UpdateBooking(booking);
+    }
+    
+    public async Task MarkExpiredBookingsAsCompleted()
+    {
+        await _bookingRepository.MarkExpiredBookingsAsCompleted();
     }
     
     private BookingDto ConvertBookingToBookingDto(Booking booking)

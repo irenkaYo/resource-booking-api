@@ -43,6 +43,24 @@ public class BookingRepository : IBookingRepository
         await db.SaveChangesAsync();
     }
     
+    public async Task MarkExpiredBookingsAsCompleted()
+    {
+        var now = DateTime.UtcNow;
+
+        var bookings = await db.Bookings
+            .Where(b => b.EndTime <= now &&
+                        b.Status != BookingStatus.Completed &&
+                        b.Status != BookingStatus.Canceled)
+            .ToListAsync();
+
+        foreach (var booking in bookings)
+        {
+            booking.Status = BookingStatus.Completed;
+        }
+
+        await db.SaveChangesAsync();
+    }
+    
     public async Task<bool> HasConflict(Guid resourceId, DateTime startTime, DateTime endTime)
     {
         return await db.Bookings
