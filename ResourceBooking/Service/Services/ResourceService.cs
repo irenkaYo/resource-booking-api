@@ -9,11 +9,13 @@ public class ResourceService
 {
     private readonly IResourceRepository _resourceRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IBookingRepository _bookingRepository;
     
-    public ResourceService(IResourceRepository resourceRepository, IUserRepository userRepository)
+    public ResourceService(IResourceRepository resourceRepository, IUserRepository userRepository, IBookingRepository bookingRepository)
     {
         _resourceRepository = resourceRepository;
         _userRepository = userRepository;
+        _bookingRepository = bookingRepository;
     }
 
     public async Task<List<ResourceDto>> GetAllResources()
@@ -60,7 +62,6 @@ public class ResourceService
         resource.CategoryId = resourceDto.CategoryId;
         resource.Capacity = resourceDto.Capacity;
         
-        
         try
         {
             await _resourceRepository.UpdateResource(resource, rowVersion);
@@ -82,7 +83,7 @@ public class ResourceService
             throw new Exception("Resource is already active");
     }
     
-    public async Task<IEnumerable<ResourceDto>> GetResources(ResourceFilterDto filter)
+    public async Task<IEnumerable<ResourceDto>> GetFilterResources(ResourceFilterDto filter)
     {
         var resources = await _resourceRepository.GetFilteredResources(
             filter.LocationId,
@@ -91,6 +92,19 @@ public class ResourceService
             filter.FeatureId);
 
         return resources.Select(r => ConvertResourceToResourceDto(r));
+    }
+
+    public async Task<bool> IsResourceFree(Guid resourceId, DateTime startDate, DateTime endDate)
+    {
+        Resource resource = await GetResource(resourceId);
+        List<Booking> bookings = await _bookingRepository.GetBookingsByResourceId(resourceId);
+        
+        var hasConflict = bookings.Any(b =>
+            b.Status != BookingStatus.Canceled &&
+            startDate < b.EndTime &&
+            endDate > b.StartTime
+        );
+        return !hasConflict;
     }
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
