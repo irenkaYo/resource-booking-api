@@ -49,6 +49,7 @@ public class BookingRepository : IBookingRepository
             .Where(b => b.EndTime <= now &&
                         b.Status != BookingStatus.Completed &&
                         b.Status != BookingStatus.Canceled)
+            .Include(x => x.Resource)
             .ToListAsync();
         return bookings;
     }
