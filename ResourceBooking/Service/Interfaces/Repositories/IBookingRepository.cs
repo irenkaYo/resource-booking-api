@@ -8,7 +8,7 @@ public interface IBookingRepository
     public Task<Booking>? GetBookingById(Guid bookingId);
     public Task AddBooking(Booking booking);
     public Task UpdateBooking(Booking booking);
-    public Task MarkExpiredBookingsAsCompleted();
+    public Task<List<Booking>> GetExpiredBookings(DateTime now);
     Task<bool> HasConflict(Guid resourceId, DateTime startTime, DateTime endTime);
     public Task<List<Booking>> GetBookingsByResourceId(Guid resourceId);
 }
