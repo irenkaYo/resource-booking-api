@@ -1,4 +1,3 @@
-using Domain.Models;
 using Infrastructure.DTO.Resource;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services;
@@ -30,17 +29,18 @@ public class ResourceController : ControllerBase
         return Ok(resource);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateResource(CreateResourceDto resourceDto, Guid userId)
+    [HttpPost("{userId}")]
+    public async Task<IActionResult> CreateResource([FromBody] CreateResourceDto resourceDto, [FromRoute] Guid userId)
     {
         var resource = await _resourceService.CreateResource(resourceDto, userId);
         return Ok(resource);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateResource(Guid resourceId,UpdateResourceDto resourceDto, Guid userId, byte[] rowVersion)
+    [HttpPut("{resourceId}/{userId}")]
+    public async Task<IActionResult> UpdateResource(Guid resourceId, [FromBody] UpdateResourceDto resourceDto, Guid userId)
     {
-        var resource = await _resourceService.UpdateResource(resourceId, userId, resourceDto, rowVersion);
+        var rowVersionBytes = Convert.FromBase64String(resourceDto.RowVersion);
+        var resource = await _resourceService.UpdateResource(resourceId, userId, resourceDto, rowVersionBytes);
         return Ok(resource);
     }
 
