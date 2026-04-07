@@ -18,6 +18,8 @@ public class ResourceRepository : IResourceRepository
     {
         List<Resource> resources = await db.Resources
             .Include(x => x.Features)
+            .Include(x => x.Category)
+            .Include(x => x.Location)
             .ToListAsync();
         return resources;
     }
@@ -26,6 +28,8 @@ public class ResourceRepository : IResourceRepository
     {
         Resource? resource = await db.Resources
             .Include(x => x.Features)
+            .Include(x => x.Category)
+            .Include(x => x.Location)
             .FirstOrDefaultAsync(x  => x.Id == resourceId);
         return resource;
     }
@@ -39,6 +43,12 @@ public class ResourceRepository : IResourceRepository
     public async Task UpdateResource(Resource resource, byte[] rowVersion)
     {
         db.Entry(resource).Property("RowVersion").OriginalValue = rowVersion;
+        db.Resources.Update(resource);
+        await db.SaveChangesAsync();
+    }
+    
+    public async Task UpdateResource(Resource resource)
+    {
         db.Resources.Update(resource);
         await db.SaveChangesAsync();
     }
