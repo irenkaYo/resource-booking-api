@@ -69,4 +69,13 @@ public class BookingRepository : IBookingRepository
                 b.StartTime < endTime &&
                 b.EndTime > startTime);
     }
+
+    public async Task<List<Booking>> GetBookingsByResourceId(Guid resourceId)
+    {
+        List<Booking> bookings = await db.Bookings
+            .Include(x => x.Resource)
+            .Where(x => x.UserId == resourceId)
+            .ToListAsync();
+        return bookings;
+    }
 }
