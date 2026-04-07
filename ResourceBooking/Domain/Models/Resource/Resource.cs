@@ -11,6 +11,8 @@ public class Resource
     public bool IsActive { get; set; }
     public List<Feature> Features { get; set; }
     public byte[] RowVersion { get; set; }
+    public Location Location { get; set; }
+    public Category Category { get; set; }//добавить инклюды
 
     public Resource(string name, string description, Guid locationId, Guid categoryId, int capacity)
     {
