@@ -10,12 +10,24 @@ public class ResourceService
     private readonly IResourceRepository _resourceRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBookingRepository _bookingRepository;
+    private readonly ILocationRepository _locationRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IFeatureRepository _featureRepository;
     
-    public ResourceService(IResourceRepository resourceRepository, IUserRepository userRepository, IBookingRepository bookingRepository)
+    public ResourceService(
+        IResourceRepository resourceRepository, 
+        IUserRepository userRepository, 
+        IBookingRepository bookingRepository,
+        ILocationRepository locationRepository,
+        ICategoryRepository categoryRepository,
+        IFeatureRepository featureRepository)
     {
         _resourceRepository = resourceRepository;
         _userRepository = userRepository;
         _bookingRepository = bookingRepository;
+        _locationRepository = locationRepository;
+        _categoryRepository = categoryRepository;
+        _featureRepository = featureRepository;
     }
 
     public async Task<List<ResourceDto>> GetAllResources()
@@ -107,6 +119,39 @@ public class ResourceService
         return !hasConflict;
     }
 
+    public async Task SetLocation(Guid resourceId, Guid locationId)
+    {
+        Resource resource = await GetResource(resourceId);
+        Location? location = await _locationRepository.GetLocationById(locationId);
+        if (location == null)
+            throw new Exception("Location not found");
+        
+        resource.LocationId = location.Id;
+        await _resourceRepository.UpdateResource(resource);
+    }
+
+    public async Task SetCategory(Guid resourceId, Guid categoryId)
+    {
+        Resource resource = await GetResource(resourceId);
+        Category? category = await _categoryRepository.GetCategoryById(categoryId);
+        if (category == null)
+            throw new Exception("Category not found");
+        
+        resource.CategoryId = category.Id;
+        await _resourceRepository.UpdateResource(resource);
+    }
+
+    public async Task AddFeature(Guid resourceId, Guid featureId)
+    {
+        Resource resource = await GetResource(resourceId);
+        Feature? feature = await _featureRepository.GetFeatureById(featureId);
+        if (feature == null)
+            throw new Exception("Feature not found");
+        
+        resource.Features.Add(feature);
+        await _resourceRepository.UpdateResource(resource);
+    }
+
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
     {
         ResourceDto resourceDto = new ResourceDto(
@@ -134,7 +179,7 @@ public class ResourceService
     
     private async Task<Resource> GetResource(Guid resourceId)
     {
-        var resource = await _resourceRepository.GetResourceById(resourceId);
+        Resource? resource = await _resourceRepository.GetResourceById(resourceId);
 
         if (resource == null)
             throw new Exception("Resource not found");
