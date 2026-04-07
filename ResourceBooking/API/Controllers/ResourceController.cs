@@ -44,14 +44,14 @@ public class ResourceController : ControllerBase
         return Ok(resource);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/{userId}")]
     public async Task<IActionResult> DeleteResource(Guid id, Guid userId)
     {
         await _resourceService.DeleteResource(id, userId);
         return NoContent();
     }
     
-    [HttpGet]
+    [HttpPost("filter")]
     public async Task<IActionResult> GetResources([FromBody]ResourceFilterDto filter)
     {
         var resources = await _resourceService.GetFilterResources(filter);
@@ -62,7 +62,7 @@ public class ResourceController : ControllerBase
     public async Task<IActionResult> ResourceIsFree(Guid resourceId, [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate)
     {
-        var result = _resourceService.IsResourceFree(resourceId, startDate, endDate);
+        var result = await _resourceService.IsResourceFree(resourceId, startDate, endDate);
         return Ok(result);
     }
 }
