@@ -140,7 +140,7 @@ public class BookingService : IBookingService
     
     private async Task<User> GetUser(Guid userId)
     {
-        var user = await _userRepository.GetUserById(userId);
+        User? user = await _userRepository.GetUserById(userId);
 
         if (user == null)
             throw new Exception("User not found");

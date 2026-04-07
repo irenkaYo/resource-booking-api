@@ -52,7 +52,7 @@ public class UserService
 
     public async Task<UserDto> GetUserByID(Guid userId)
     {
-        User user = await _userRepository.GetUserById(userId);
+        User? user = await _userRepository.GetUserById(userId);
         if (user == null)
             throw new Exception("Invalid ID");
         
