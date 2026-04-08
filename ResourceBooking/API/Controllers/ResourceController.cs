@@ -5,7 +5,7 @@ using Service.Services;
 namespace API.Controllers;
 
 [ApiController]
-[Route("resources")]
+[Route("api/resources")]
 public class ResourceController : ControllerBase
 {
     private readonly ResourceService _resourceService;

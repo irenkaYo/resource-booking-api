@@ -5,7 +5,7 @@ using Service.Services;
 namespace API.Controllers;
 
 [ApiController]
-[Route("bookings")]
+[Route("api/bookings")]
 public class BookingController : ControllerBase
 {
     private readonly BookingService _bookingService;

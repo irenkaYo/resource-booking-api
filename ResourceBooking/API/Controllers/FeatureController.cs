@@ -5,7 +5,7 @@ using Service.Services;
 namespace API.Controllers;
 
 [ApiController]
-[Route("features")]
+[Route("api/features")]
 public class FeatureController : ControllerBase
 {
     private readonly FeatureService _featureService;

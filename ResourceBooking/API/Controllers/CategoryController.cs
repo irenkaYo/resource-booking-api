@@ -5,7 +5,7 @@ using Service.Services;
 namespace API.Controllers;
 
 [ApiController]
-[Route("categories")]
+[Route("api/categories")]
 public class CategoryController : ControllerBase
 {
     private readonly CategoryService _categoryService;
