@@ -1,6 +1,6 @@
 namespace Service.DTO.Location;
 
-public class CreateLocationDto
+public class CreateLocationDto : INameDto
 {
     public string Name { get; set; }
 }

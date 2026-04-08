@@ -1,6 +1,6 @@
 namespace Service.DTO.Feature;
 
-public class CreateFeatureDto
+public class CreateFeatureDto : INameDto
 {
     public string Name { get; set; }
 }
