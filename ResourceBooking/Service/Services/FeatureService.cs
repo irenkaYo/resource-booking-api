@@ -20,6 +20,15 @@ public class FeatureService
         return ConvertFeatureToDto(feature);
     }
 
+    public async Task<FeatureDto> GetFeatureById(Guid id)
+    {
+        Feature? feature = await _featureRepository.GetFeatureById(id);
+        if (feature == null)
+            throw new Exception("Feature not found");
+        
+        return ConvertFeatureToDto(feature);
+    }
+
     private FeatureDto ConvertFeatureToDto(Feature feature)
     {
         FeatureDto dto = new FeatureDto(feature.Id, feature.Name);

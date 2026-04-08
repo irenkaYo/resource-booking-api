@@ -20,6 +20,15 @@ public class CategoryService
         return ConvertCategoryToDto(category);
     }
 
+    public async Task<CategoryDto> GetCategoryById(Guid id)
+    {
+        Category? category = await _categoryRepository.GetCategoryById(id);
+        if (category == null)
+            throw new Exception("Category not found");
+        
+        return ConvertCategoryToDto(category);
+    }
+
     private CategoryDto ConvertCategoryToDto(Category category)
     {
         CategoryDto dto = new CategoryDto(category.Id, category.Name);
