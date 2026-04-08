@@ -1,3 +1,5 @@
+using Service.DTO.Feature;
+
 namespace Infrastructure.DTO.Resource;
 
 public class ResourceDto
@@ -10,6 +12,7 @@ public class ResourceDto
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
     public byte[] RowVersion { get; set; }
+    public List<FeatureDto> Features { get; set; }
 
     public ResourceDto(
         Guid id, 
@@ -19,7 +22,8 @@ public class ResourceDto
         Guid categoryId, 
         int capacity, 
         bool isActive, 
-        byte[] rowVersion)
+        byte[] rowVersion,
+        List<FeatureDto> features)
     {
         Id = id;
         Name = name;
@@ -29,5 +33,6 @@ public class ResourceDto
         Capacity = capacity;
         IsActive = isActive;
         RowVersion = rowVersion;
+        Features = features;
     }
 }

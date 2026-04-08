@@ -1,6 +1,7 @@
 using Domain.Models;
 using Infrastructure.DTO.Resource;
 using Microsoft.EntityFrameworkCore;
+using Service.DTO.Feature;
 using Service.Interfaces.Repositories;
 
 namespace Service.Services;
@@ -132,6 +133,10 @@ public class ResourceService
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
     {
+        var featureDtos = resource.Features
+            .Select(f => new FeatureDto(f.Id, f.Name))
+            .ToList();
+        
         ResourceDto resourceDto = new ResourceDto(
             resource.Id, 
             resource.Name, 
@@ -140,7 +145,8 @@ public class ResourceService
             resource.CategoryId, 
             resource.Capacity, 
             resource.IsActive,
-            resource.RowVersion);
+            resource.RowVersion,
+            featureDtos);
         return resourceDto;
     }
     
