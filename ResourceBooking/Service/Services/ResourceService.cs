@@ -119,28 +119,6 @@ public class ResourceService
         return !hasConflict;
     }
 
-    public async Task SetLocation(Guid resourceId, Guid locationId)
-    {
-        Resource resource = await GetResource(resourceId);
-        Location? location = await _locationRepository.GetLocationById(locationId);
-        if (location == null)
-            throw new Exception("Location not found");
-        
-        resource.LocationId = location.Id;
-        await _resourceRepository.UpdateResource(resource);
-    }
-
-    public async Task SetCategory(Guid resourceId, Guid categoryId)
-    {
-        Resource resource = await GetResource(resourceId);
-        Category? category = await _categoryRepository.GetCategoryById(categoryId);
-        if (category == null)
-            throw new Exception("Category not found");
-        
-        resource.CategoryId = category.Id;
-        await _resourceRepository.UpdateResource(resource);
-    }
-
     public async Task AddFeature(Guid resourceId, Guid featureId)
     {
         Resource resource = await GetResource(resourceId);

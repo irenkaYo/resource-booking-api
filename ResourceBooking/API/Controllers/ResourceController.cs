@@ -66,20 +66,6 @@ public class ResourceController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("{resourceId}/location")]
-    public async Task<IActionResult> AddLocation(Guid resourceId, [FromBody] Guid locationId)
-    {
-        await _resourceService.SetLocation(resourceId, locationId);
-        return Ok();
-    }
-
-    [HttpPost("{resourceId}/category")]
-    public async Task<IActionResult> AddCategory(Guid resourceId, [FromBody] Guid categoryId)
-    {
-        await _resourceService.SetCategory(resourceId, categoryId);
-        return Ok();
-    }
-
     [HttpPost("{resourceId}/feature")]
     public async Task<IActionResult> AddFeature(Guid resourceId, [FromBody] Guid featureId)
     {
