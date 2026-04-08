@@ -11,8 +11,6 @@ public class ResourceService
     private readonly IResourceRepository _resourceRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBookingRepository _bookingRepository;
-    private readonly ILocationRepository _locationRepository;
-    private readonly ICategoryRepository _categoryRepository;
     private readonly IFeatureRepository _featureRepository;
     
     public ResourceService(
@@ -26,8 +24,6 @@ public class ResourceService
         _resourceRepository = resourceRepository;
         _userRepository = userRepository;
         _bookingRepository = bookingRepository;
-        _locationRepository = locationRepository;
-        _categoryRepository = categoryRepository;
         _featureRepository = featureRepository;
     }
 
