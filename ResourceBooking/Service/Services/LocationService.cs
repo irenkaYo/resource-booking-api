@@ -20,6 +20,15 @@ public class LocationService
         return ConvertLocationToDto(location);
     }
 
+    public async Task<LocationDto> GetLocationById(Guid id)
+    {
+        Location? location = await _locationRepository.GetLocationById(id);
+        if (location == null)
+            throw new Exception("Location not found");
+        
+        return ConvertLocationToDto(location);
+    }
+
     private LocationDto ConvertLocationToDto(Location location)
     {
         LocationDto dto = new LocationDto(location.Id, location.Name);
