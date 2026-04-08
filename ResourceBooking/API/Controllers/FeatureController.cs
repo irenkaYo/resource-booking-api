@@ -1,0 +1,32 @@
+using Microsoft.AspNetCore.Mvc;
+using Service.DTO.Category;
+using Service.DTO.Feature;
+using Service.Services;
+
+namespace API.Controllers;
+
+[ApiController]
+[Route("features")]
+public class FeatureController : ControllerBase
+{
+    private readonly FeatureService _featureService;
+
+    public FeatureController(FeatureService featureService)
+    {
+        _featureService = featureService;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateFeature([FromBody] CreateFeatureDto featureDto)
+    {
+        var feature = await _featureService.CreateFeature(featureDto);
+        return CreatedAtAction(nameof(GetFeatureById), new { id = feature.Id }, feature);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetFeatureById(Guid id)
+    {
+        var feature = await _featureService.GetFeatureById(id);
+        return Ok(feature);
+    }
+}
