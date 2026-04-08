@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO.Category;
-using Service.DTO.Location;
 using Service.Services;
 
 namespace API.Controllers;

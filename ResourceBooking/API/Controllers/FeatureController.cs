@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Service.DTO.Category;
 using Service.DTO.Feature;
 using Service.Services;
 
