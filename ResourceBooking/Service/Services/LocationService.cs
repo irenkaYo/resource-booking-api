@@ -7,14 +7,17 @@ namespace Service.Services;
 public class LocationService
 {
     private readonly ILocationRepository _locationRepository;
+    private readonly IUserRepository _userRepository;
 
-    public LocationService(ILocationRepository locationRepository)
+    public LocationService(ILocationRepository locationRepository, IUserRepository userRepository)
     {
         _locationRepository = locationRepository;
+        _userRepository = userRepository;
     }
 
-    public async Task<LocationDto> CreateLocation(CreateLocationDto locationDto)
+    public async Task<LocationDto> CreateLocation(CreateLocationDto locationDto, Guid userId)
     {
+        await GetAdminUser(userId);
         Location location = new Location(locationDto.Name);
         await _locationRepository.CreateLocation(location);
         return ConvertLocationToDto(location);
@@ -33,5 +36,16 @@ public class LocationService
     {
         LocationDto dto = new LocationDto(location.Id, location.Name);
         return dto;
+    }
+    
+    private async Task GetAdminUser(Guid userId)
+    {
+        var user = await _userRepository.GetUserById(userId);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        if (user.Role != UserRole.Admin)
+            throw new Exception("Access denied");
     }
 }

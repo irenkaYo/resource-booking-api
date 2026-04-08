@@ -7,14 +7,17 @@ namespace Service.Services;
 public class FeatureService
 {
     private readonly IFeatureRepository _featureRepository;
+    private readonly IUserRepository _userRepository;
 
-    public FeatureService(IFeatureRepository featureRepository)
+    public FeatureService(IFeatureRepository featureRepository, IUserRepository userRepository)
     {
         _featureRepository = featureRepository;
+        _userRepository = userRepository;
     }
 
-    public async Task<FeatureDto> CreateFeature(CreateFeatureDto featureDto)
+    public async Task<FeatureDto> CreateFeature(CreateFeatureDto featureDto, Guid userId)
     {
+        await GetAdminUser(userId);
         Feature feature = new Feature(featureDto.Name);
         await _featureRepository.CreateFeature(feature);
         return ConvertFeatureToDto(feature);
@@ -33,5 +36,16 @@ public class FeatureService
     {
         FeatureDto dto = new FeatureDto(feature.Id, feature.Name);
         return dto;
+    }
+    
+    private async Task GetAdminUser(Guid userId)
+    {
+        var user = await _userRepository.GetUserById(userId);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        if (user.Role != UserRole.Admin)
+            throw new Exception("Access denied");
     }
 }

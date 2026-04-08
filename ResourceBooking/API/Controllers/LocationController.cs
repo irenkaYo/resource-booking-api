@@ -16,9 +16,9 @@ public class LocationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDto locationDto)
+    public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDto locationDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
-        var location = await _locationService.CreateLocation(locationDto);
+        var location = await _locationService.CreateLocation(locationDto, userId);
         return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, location);
     }
     
