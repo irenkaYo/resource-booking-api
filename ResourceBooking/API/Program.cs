@@ -46,6 +46,8 @@ builder.Services.AddScoped<IHashService, Sha256Convertation>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateResourceValidator>();
 builder.Services.AddScoped<IValidator<CreateLocationDto>, NameDtoValidator<CreateLocationDto>>();
 builder.Services.AddScoped<IValidator<CreateCategoryDto>, NameDtoValidator<CreateCategoryDto>>();
 builder.Services.AddScoped<IValidator<CreateFeatureDto>, NameDtoValidator<CreateFeatureDto>>();
