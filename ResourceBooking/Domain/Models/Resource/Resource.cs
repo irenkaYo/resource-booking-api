@@ -9,10 +9,10 @@ public class Resource
     public Guid CategoryId { get; set; }
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
-    public List<Feature> Features { get; set; }
+    public List<ResourceFeature> ResourceFeatures { get; set; }
     public byte[] RowVersion { get; set; }
     public Location Location { get; set; }
-    public Category Category { get; set; }//добавить инклюды
+    public Category Category { get; set; }
 
     public Resource(string name, string description, Guid locationId, Guid categoryId, int capacity)
     {
@@ -23,6 +23,6 @@ public class Resource
         CategoryId = categoryId;
         Capacity = capacity;
         IsActive = true;
-        Features = new List<Feature>();
+        ResourceFeatures = new List<ResourceFeature>();
     }
 }
