@@ -24,5 +24,6 @@ public class ResourceBookingContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new ResourceConfiguration());
         modelBuilder.ApplyConfiguration(new BookingConfiguration());
+        modelBuilder.ApplyConfiguration(new ResourceFeatureConfiguration());
     }
 }
