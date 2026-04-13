@@ -12,7 +12,7 @@ public class ResourceDto
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
     public byte[] RowVersion { get; set; }
-    public List<FeatureDto> Features { get; set; }
+    public List<FeatureNameDto> Features { get; set; }
 
     public ResourceDto(
         Guid id, 
@@ -23,7 +23,7 @@ public class ResourceDto
         int capacity, 
         bool isActive, 
         byte[] rowVersion,
-        List<FeatureDto> features)
+        List<FeatureNameDto> features)
     {
         Id = id;
         Name = name;
