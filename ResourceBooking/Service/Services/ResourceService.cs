@@ -12,19 +12,20 @@ public class ResourceService
     private readonly IUserRepository _userRepository;
     private readonly IBookingRepository _bookingRepository;
     private readonly IFeatureRepository _featureRepository;
+    private  readonly IResourceFeatureRepository _resourceFeatureRepository;
     
     public ResourceService(
         IResourceRepository resourceRepository, 
         IUserRepository userRepository, 
         IBookingRepository bookingRepository,
-        ILocationRepository locationRepository,
-        ICategoryRepository categoryRepository,
-        IFeatureRepository featureRepository)
+        IFeatureRepository featureRepository,
+        IResourceFeatureRepository resourceFeatureRepository)
     {
         _resourceRepository = resourceRepository;
         _userRepository = userRepository;
         _bookingRepository = bookingRepository;
         _featureRepository = featureRepository;
+        _resourceFeatureRepository = resourceFeatureRepository;
     }
 
     public async Task<List<ResourceDto>> GetAllResources()
@@ -120,17 +121,19 @@ public class ResourceService
     {
         Resource resource = await GetResource(resourceId);
         Feature? feature = await _featureRepository.GetFeatureById(featureId);
+
         if (feature == null)
             throw new Exception("Feature not found");
-        
-        resource.Features.Add(feature);
-        await _resourceRepository.UpdateResource(resource);
+
+        ResourceFeature resourceFeature = new ResourceFeature(resourceId, featureId);
+
+        await _resourceFeatureRepository.Add(resourceFeature);
     }
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
     {
-        var featureDtos = resource.Features
-            .Select(f => new FeatureDto(f.Id, f.Name))
+        var featureDtos = resource.ResourceFeatures
+            .Select(rf => new FeatureNameDto(rf.Feature.Name))
             .ToList();
         
         ResourceDto resourceDto = new ResourceDto(
