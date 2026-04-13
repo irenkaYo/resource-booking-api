@@ -36,8 +36,8 @@ public class BookingController : ControllerBase
         return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
     }
 
-    [HttpPut("{bookingId}/cancel/{userId}")]
-    public async Task<IActionResult> CancelBooking(Guid bookingId, Guid userId)
+    [HttpPut("{bookingId}/cancel")]
+    public async Task<IActionResult> CancelBooking(Guid bookingId, [FromBody] Guid userId)
     {
         await _bookingService.CancelBooking(bookingId, userId);
         return Ok();
