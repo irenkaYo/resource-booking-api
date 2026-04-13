@@ -20,7 +20,7 @@ public class UserRepository : IUserRepository
         await db.SaveChangesAsync();
     }
 
-    public async Task<User>? GetUserById(Guid userId)
+    public async Task<User?> GetUserById(Guid userId)
     {
         User? user = await db.Users
             .Include(x => x.Bookings)
