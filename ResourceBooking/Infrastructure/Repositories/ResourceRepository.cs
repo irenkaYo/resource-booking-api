@@ -17,7 +17,8 @@ public class ResourceRepository : IResourceRepository
     public async Task<List<Resource>> GetAllResources()
     {
         List<Resource> resources = await db.Resources
-            .Include(x => x.Features)
+            .Include(x => x.ResourceFeatures)
+            .ThenInclude(rf => rf.Feature)
             .Include(x => x.Category)
             .Include(x => x.Location)
             .ToListAsync();
@@ -27,7 +28,8 @@ public class ResourceRepository : IResourceRepository
     public async Task<Resource>? GetResourceById(Guid resourceId)
     {
         Resource? resource = await db.Resources
-            .Include(x => x.Features)
+            .Include(x => x.ResourceFeatures)
+            .ThenInclude(rf => rf.Feature)
             .Include(x => x.Category)
             .Include(x => x.Location)
             .FirstOrDefaultAsync(x  => x.Id == resourceId);
@@ -65,7 +67,8 @@ public class ResourceRepository : IResourceRepository
         Guid? featureId)
     {
         var query = db.Resources
-            .Include(r => r.Features)
+            .Include(r => r.ResourceFeatures)
+            .ThenInclude(rf => rf.Feature)
             .AsQueryable();
 
         if (locationId.HasValue)
@@ -78,7 +81,8 @@ public class ResourceRepository : IResourceRepository
             query = query.Where(r => r.CategoryId == categoryId);
 
         if (featureId.HasValue)
-            query = query.Where(r => r.Features.Any(f => f.Id == featureId));
+            query = query.Where(r => r.ResourceFeatures
+                .Any(rf => rf.FeatureId == featureId));
 
         return await query.ToListAsync();
     }
