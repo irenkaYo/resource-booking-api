@@ -59,22 +59,29 @@ public class ResourceService
         await _resourceRepository.CreateResource(resource);
         return ConvertResourceToResourceDto(resource);
     }
-
-    public async Task<ResourceDto> UpdateResource(Guid resourceId, Guid userId, UpdateResourceDto resourceDto, byte[] rowVersion)
+    
+    public async Task<ResourceDto> UpdateResource(Guid resourceId, Guid userId, UpdateResourceDto dto)
     {
         await GetAdminUser(userId);
         
         Resource resource = await GetResource(resourceId);
+        _resourceRepository.SetXmin(resource, dto.xmin);
 
-        resource.Name = resourceDto.Name;
-        resource.Description = resourceDto.Description;
-        resource.LocationId = resourceDto.LocationId;
-        resource.CategoryId = resourceDto.CategoryId;
-        resource.Capacity = resourceDto.Capacity;
-        
+        if (dto.Name != null)
+            resource.Name = dto.Name;
+
+        if (dto.LocationId.HasValue)
+            resource.LocationId = dto.LocationId.Value;
+
+        if (dto.CategoryId.HasValue)
+            resource.CategoryId = dto.CategoryId.Value;
+
+        if (dto.Capacity.HasValue)
+            resource.Capacity = dto.Capacity.Value;
+
         try
         {
-            await _resourceRepository.UpdateResource(resource, rowVersion);
+            await _resourceRepository.UpdateResource(resource);
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -109,9 +116,8 @@ public class ResourceService
         return enumerable.Select(r => ConvertResourceToResourceDto(r));
     }
 
-    public async Task<bool> IsResourceFree(Guid resourceId, DateTime startDate, DateTime endDate)
+    public async Task<bool> IsResourceFree(Guid resourceId, DateTimeOffset startDate, DateTimeOffset endDate)
     {
-        Resource resource = await GetResource(resourceId);
         List<Booking> bookings = await _bookingRepository.GetBookingsByResourceId(resourceId);
         
         var hasConflict = bookings.Any(b =>
@@ -124,7 +130,6 @@ public class ResourceService
 
     public async Task AddFeature(Guid resourceId, Guid featureId)
     {
-        Resource resource = await GetResource(resourceId);
         Feature? feature = await _featureRepository.GetFeatureById(featureId);
 
         if (feature == null)
@@ -157,7 +162,7 @@ public class ResourceService
             resource.CategoryId, 
             resource.Capacity, 
             resource.IsActive,
-            resource.RowVersion,
+            resource.xmin,
             featureDtos);
         return resourceDto;
     }
