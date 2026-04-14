@@ -10,7 +10,7 @@ public class Resource
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
     public List<ResourceFeature> ResourceFeatures { get; set; }
-    public byte[] RowVersion { get; set; }
+    public uint xmin { get; set; }
     public Location Location { get; set; }
     public Category Category { get; set; }
 

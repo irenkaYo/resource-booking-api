@@ -11,4 +11,5 @@ public interface IResourceRepository
     public Task UpdateResource(Resource resource);
     public Task DeleteResource(Resource resource);
     public Task<IEnumerable<Resource>> GetFilteredResources(Guid? locationId, Guid? categoryId, int? capacity, Guid? featureId);
+    public void SetXmin(Resource resource, uint xmin);
 }

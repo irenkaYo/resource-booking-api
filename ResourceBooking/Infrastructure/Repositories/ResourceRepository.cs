@@ -54,6 +54,11 @@ public class ResourceRepository : IResourceRepository
         db.Resources.Update(resource);
         await db.SaveChangesAsync();
     }
+    
+    public void SetXmin(Resource resource, uint xmin)
+    {
+        db.Entry(resource).Property("xmin").OriginalValue = xmin;
+    }
 
     public async Task DeleteResource(Resource resource)
     {

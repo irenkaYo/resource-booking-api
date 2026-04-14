@@ -39,7 +39,6 @@ public class ResourceController : ControllerBase
     [HttpPatch("{resourceId}")]
     public async Task<IActionResult> UpdateResource(Guid resourceId, [FromBody] UpdateResourceDto resourceDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
-        var rowVersionBytes = Convert.FromBase64String(resourceDto.RowVersion);
         var resource = await _resourceService.UpdateResource(resourceId, userId, resourceDto);
         return Ok(resource);
     }

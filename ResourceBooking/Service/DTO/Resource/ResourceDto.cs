@@ -11,7 +11,7 @@ public class ResourceDto
     public Guid CategoryId { get; set; }
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
-    public byte[] RowVersion { get; set; }
+    public uint xmin { get; set; }
     public List<FeatureNameDto> Features { get; set; }
 
     public ResourceDto(
@@ -22,7 +22,7 @@ public class ResourceDto
         Guid categoryId, 
         int capacity, 
         bool isActive, 
-        byte[] rowVersion,
+        uint xmin,
         List<FeatureNameDto> features)
     {
         Id = id;
@@ -32,7 +32,7 @@ public class ResourceDto
         CategoryId = categoryId;
         Capacity = capacity;
         IsActive = isActive;
-        RowVersion = rowVersion;
+        this.xmin = xmin;
         Features = features;
     }
 }

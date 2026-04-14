@@ -16,6 +16,6 @@ public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
             .HasMaxLength(250)
             .IsRequired();
         
-        builder.Property(a => a.RowVersion).IsRowVersion();
+        builder.UseXminAsConcurrencyToken();
     }
 }
