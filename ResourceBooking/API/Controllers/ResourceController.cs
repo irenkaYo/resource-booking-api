@@ -72,4 +72,11 @@ public class ResourceController : ControllerBase
         await _resourceService.AddFeature(resourceId, featureId);
         return Ok();
     }
+
+    [HttpGet("{resourceId}/active/{userId}")]
+    public async Task<IActionResult> DeactivateResource(Guid resourceId, Guid userId)
+    {
+        await _resourceService.DeactivateResource(resourceId, userId);
+        return Ok("Resource deactivated");
+    }
 }
