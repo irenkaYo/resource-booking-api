@@ -8,7 +8,6 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     public void Configure(EntityTypeBuilder<Booking> builder)
     {
-        builder.HasIndex(a => a.ResourceId).IsUnique();
         builder.HasIndex(a => a.StartTime).IsUnique();
         builder.HasIndex(a => a.EndTime).IsUnique();
         
