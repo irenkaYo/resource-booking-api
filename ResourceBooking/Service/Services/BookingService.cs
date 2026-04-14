@@ -99,7 +99,7 @@ public class BookingService : IBookingService
     
     public async Task MarkExpiredBookingsAsCompleted()
     {
-        DateTime now = DateTime.UtcNow;
+        DateTimeOffset now = DateTimeOffset.UtcNow;
         List<Booking> bookings = await _bookingRepository.GetExpiredBookings(now);
 
         foreach (var booking in bookings)
@@ -117,7 +117,7 @@ public class BookingService : IBookingService
             booking.UserId, 
             booking.StartTime, 
             booking.EndTime, 
-            booking.Status, 
+            booking.Status.ToString(), 
             booking.CreatedAt);
         return dto;
     }
