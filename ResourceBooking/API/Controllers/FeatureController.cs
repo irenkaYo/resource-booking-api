@@ -22,10 +22,10 @@ public class FeatureController : ControllerBase
         return CreatedAtAction(nameof(GetFeatureById), new { id = feature.Id }, feature);
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetFeatureById(Guid id)
+    [HttpGet("{featureId}")]
+    public async Task<IActionResult> GetFeatureById(Guid featureId)
     {
-        var feature = await _featureService.GetFeatureById(id);
+        var feature = await _featureService.GetFeatureById(featureId);
         return Ok(feature);
     }
 }

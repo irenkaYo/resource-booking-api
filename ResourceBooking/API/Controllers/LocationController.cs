@@ -22,10 +22,10 @@ public class LocationController : ControllerBase
         return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, location);
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetLocationById(Guid id)
+    [HttpGet("{locationId}")]
+    public async Task<IActionResult> GetLocationById(Guid locationId)
     {
-        var location = await _locationService.GetLocationById(id);
+        var location = await _locationService.GetLocationById(locationId);
         return Ok(location);
     }
 }
