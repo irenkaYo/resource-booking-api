@@ -52,7 +52,7 @@ public class ResourceController : ControllerBase
     }
     
     [HttpPost("filter")]
-    public async Task<IActionResult> GetResources([FromBody]ResourceFilterDto filter)
+    public async Task<IActionResult> GetFilterResources([FromBody]ResourceFilterDto filter)
     {
         var resources = await _resourceService.GetFilterResources(filter);
         return Ok(resources);
