@@ -130,6 +130,14 @@ public class ResourceService
         await _resourceFeatureRepository.Add(resourceFeature);
     }
 
+    public async Task DeactivateResource(Guid resourceId, Guid userId)
+    {
+        await GetAdminUser(userId);
+        Resource resource = await GetResource(resourceId);
+        resource.IsActive = false;
+        await _resourceRepository.UpdateResource(resource);
+    }
+
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
     {
         var featureDtos = resource.ResourceFeatures
