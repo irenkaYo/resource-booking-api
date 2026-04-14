@@ -101,7 +101,12 @@ public class ResourceService
             filter.Capacity,
             filter.FeatureId);
 
-        return resources.Select(r => ConvertResourceToResourceDto(r));
+        var enumerable = resources.ToList();
+        
+        if (!enumerable.Any())
+            throw new Exception("No resources found");
+        
+        return enumerable.Select(r => ConvertResourceToResourceDto(r));
     }
 
     public async Task<bool> IsResourceFree(Guid resourceId, DateTime startDate, DateTime endDate)
