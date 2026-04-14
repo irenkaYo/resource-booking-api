@@ -1,5 +1,3 @@
-using Domain.Models;
-
 namespace Infrastructure.DTO;
 
 public class BookingDto
@@ -10,9 +8,9 @@ public class BookingDto
     public DateTimeOffset StartTime { get; set; }
     public DateTimeOffset EndTime { get; set; }
     public string Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
-    public BookingDto(Guid id, Guid resourceId, Guid userId, DateTimeOffset startTime, DateTimeOffset endTime, string status, DateTime createdAt)
+    public BookingDto(Guid id, Guid resourceId, Guid userId, DateTimeOffset startTime, DateTimeOffset endTime, string status, DateTimeOffset createdAt)
     {
         Id = id;
         ResourceId = resourceId;
