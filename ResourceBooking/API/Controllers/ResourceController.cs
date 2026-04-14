@@ -22,32 +22,32 @@ public class ResourceController : ControllerBase
         return Ok(resources);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetResourceById(Guid id)
+    [HttpGet("{resourceId}")]
+    public async Task<IActionResult> GetResourceById(Guid resourceId)
     {
-        var resource = await _resourceService.GetResourceById(id);
+        var resource = await _resourceService.GetResourceById(resourceId);
         return Ok(resource);
     }
 
-    [HttpPost("{userId}")]
-    public async Task<IActionResult> CreateResource([FromBody] CreateResourceDto resourceDto, [FromRoute] Guid userId)
+    [HttpPost]
+    public async Task<IActionResult> CreateResource([FromBody] CreateResourceDto resourceDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         var resource = await _resourceService.CreateResource(resourceDto, userId);
         return Ok(resource);
     }
 
-    [HttpPut("{resourceId}/{userId}")]
-    public async Task<IActionResult> UpdateResource(Guid resourceId, [FromBody] UpdateResourceDto resourceDto, Guid userId)
+    [HttpPatch("{resourceId}")]
+    public async Task<IActionResult> UpdateResource(Guid resourceId, [FromBody] UpdateResourceDto resourceDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         var rowVersionBytes = Convert.FromBase64String(resourceDto.RowVersion);
-        var resource = await _resourceService.UpdateResource(resourceId, userId, resourceDto, rowVersionBytes);
+        var resource = await _resourceService.UpdateResource(resourceId, userId, resourceDto);
         return Ok(resource);
     }
 
-    [HttpDelete("{id}/{userId}")]
-    public async Task<IActionResult> DeleteResource(Guid id, Guid userId)
+    [HttpDelete("{resourceId}")]
+    public async Task<IActionResult> DeleteResource(Guid resourceId, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
-        await _resourceService.DeleteResource(id, userId);
+        await _resourceService.DeleteResource(resourceId, userId);
         return NoContent();
     }
     
@@ -73,8 +73,8 @@ public class ResourceController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{resourceId}/active/{userId}")]
-    public async Task<IActionResult> DeactivateResource(Guid resourceId, Guid userId)
+    [HttpGet("{resourceId}/active")]
+    public async Task<IActionResult> DeactivateResource(Guid resourceId, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         await _resourceService.DeactivateResource(resourceId, userId);
         return Ok("Resource deactivated");

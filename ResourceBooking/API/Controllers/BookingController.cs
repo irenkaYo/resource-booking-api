@@ -22,10 +22,10 @@ public class BookingController : ControllerBase
         return Ok(bookings);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetBookingById(Guid id)
+    [HttpGet("{bookingId}")]
+    public async Task<IActionResult> GetBookingById(Guid bookingId)
     {
-        var booking = await _bookingService.GetBookingById(id);
+        var booking = await _bookingService.GetBookingById(bookingId);
         return Ok(booking);
     }
 
@@ -37,7 +37,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpPut("{bookingId}/cancel")]
-    public async Task<IActionResult> CancelBooking(Guid bookingId, [FromBody] Guid userId)
+    public async Task<IActionResult> CancelBooking(Guid bookingId, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         await _bookingService.CancelBooking(bookingId, userId);
         return Ok();

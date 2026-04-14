@@ -24,10 +24,10 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserById(Guid userId)
     {
-        var user = await _userService.GetUserByID(id);
+        var user = await _userService.GetUserByID(userId);
         return Ok(user);
     }
 }
