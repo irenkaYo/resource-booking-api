@@ -67,7 +67,7 @@ public class BookingRepository : IBookingRepository
     {
         List<Booking> bookings = await db.Bookings
             .Include(x => x.Resource)
-            .Where(x => x.UserId == resourceId)
+            .Where(x => x.ResourceId == resourceId)
             .ToListAsync();
         return bookings;
     }
