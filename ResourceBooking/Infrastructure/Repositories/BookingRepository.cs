@@ -43,7 +43,7 @@ public class BookingRepository : IBookingRepository
         await db.SaveChangesAsync();
     }
     
-    public async Task<List<Booking>> GetExpiredBookings(DateTime now)
+    public async Task<List<Booking>> GetExpiredBookings(DateTimeOffset now)
     {
         List<Booking> bookings = await db.Bookings
             .Where(b => b.EndTime <= now &&
@@ -54,7 +54,7 @@ public class BookingRepository : IBookingRepository
         return bookings;
     }
     
-    public async Task<bool> HasConflict(Guid resourceId, DateTime startTime, DateTime endTime)
+    public async Task<bool> HasConflict(Guid resourceId, DateTimeOffset startTime, DateTimeOffset endTime)
     {
         return await db.Bookings
             .AnyAsync(b =>

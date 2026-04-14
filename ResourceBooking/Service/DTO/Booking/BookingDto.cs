@@ -7,12 +7,12 @@ public class BookingDto
     public Guid Id { get; set; }
     public Guid ResourceId { get; set; }
     public Guid UserId { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public BookingStatus Status { get; set; }
+    public DateTimeOffset StartTime { get; set; }
+    public DateTimeOffset EndTime { get; set; }
+    public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public BookingDto(Guid id, Guid resourceId, Guid userId, DateTime startTime, DateTime endTime, BookingStatus status, DateTime createdAt)
+    public BookingDto(Guid id, Guid resourceId, Guid userId, DateTimeOffset startTime, DateTimeOffset endTime, string status, DateTime createdAt)
     {
         Id = id;
         ResourceId = resourceId;
