@@ -50,6 +50,11 @@ public class BookingService : IBookingService
 
         try
         {
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+            
+            if (dto.StartTime < now || dto.EndTime < now)
+                throw new Exception("Invalid time input");
+            
             if (dto.EndTime <= dto.StartTime)
                 throw new Exception("Invalid booking time");
             
