@@ -422,3 +422,5 @@ ResourceBooking/.idea
 
 .postman/
 postman/
+
+*.DotSettings
