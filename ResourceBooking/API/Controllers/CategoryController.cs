@@ -19,7 +19,7 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto categoryDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         var category = await _categoryService.CreateCategory(categoryDto, userId);
-        return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+        return CreatedAtAction(nameof(GetCategoryById), new { categoryId = category.Id }, category);
     }
     
     [HttpGet("{categoryId}")]

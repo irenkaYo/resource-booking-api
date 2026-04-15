@@ -33,7 +33,7 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto dto)
     {
         var booking = await _bookingService.CreateBooking(dto);
-        return CreatedAtAction(nameof(GetBookingById), new { id = booking.Id }, booking);
+        return CreatedAtAction(nameof(GetBookingById), new { bookingId = booking.Id }, booking);
     }
 
     [HttpPut("{bookingId}/cancel")]

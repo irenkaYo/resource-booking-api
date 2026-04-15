@@ -19,7 +19,7 @@ public class FeatureController : ControllerBase
     public async Task<IActionResult> CreateFeature([FromBody] CreateFeatureDto featureDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         var feature = await _featureService.CreateFeature(featureDto, userId);
-        return CreatedAtAction(nameof(GetFeatureById), new { id = feature.Id }, feature);
+        return CreatedAtAction(nameof(GetFeatureById), new { featureId = feature.Id }, feature);
     }
     
     [HttpGet("{featureId}")]

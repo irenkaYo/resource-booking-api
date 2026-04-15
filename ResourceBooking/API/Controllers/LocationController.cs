@@ -19,7 +19,7 @@ public class LocationController : ControllerBase
     public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDto locationDto, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         var location = await _locationService.CreateLocation(locationDto, userId);
-        return CreatedAtAction(nameof(GetLocationById), new { id = location.Id }, location);
+        return CreatedAtAction(nameof(GetLocationById), new { locationId = location.Id }, location);
     }
     
     [HttpGet("{locationId}")]
