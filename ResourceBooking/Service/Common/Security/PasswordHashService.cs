@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Service.Interfaces.Services;
 
-namespace Service.Interfaces;
+namespace Service.Common.Security;
 
 public class PasswordHashService : IHashService
 {
