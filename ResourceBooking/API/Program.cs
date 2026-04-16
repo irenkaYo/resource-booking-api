@@ -27,15 +27,14 @@ builder.Services.AddDbContext<ResourceBookingContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ResourceService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddHostedService<BookingStatusBackgroundService>();
-builder.Services.AddScoped<LocationService>();
-builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<FeatureService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IFeatureService, FeatureService>();
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();

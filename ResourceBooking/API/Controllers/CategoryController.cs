@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO.Category;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -8,9 +8,9 @@ namespace API.Controllers;
 [Route("api/categories")]
 public class CategoryController : ControllerBase
 {
-    private readonly CategoryService _categoryService;
+    private readonly ICategoryService _categoryService;
 
-    public CategoryController(CategoryService categoryService)
+    public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;   
     }

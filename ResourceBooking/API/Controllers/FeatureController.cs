@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO.Feature;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -8,9 +8,9 @@ namespace API.Controllers;
 [Route("api/features")]
 public class FeatureController : ControllerBase
 {
-    private readonly FeatureService _featureService;
+    private readonly IFeatureService _featureService;
 
-    public FeatureController(FeatureService featureService)
+    public FeatureController(IFeatureService featureService)
     {
         _featureService = featureService;
     }

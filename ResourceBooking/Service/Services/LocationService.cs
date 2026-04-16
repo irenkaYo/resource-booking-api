@@ -1,10 +1,11 @@
 using Domain.Models;
 using Service.DTO.Location;
 using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class LocationService
+public class LocationService : ILocationService
 {
     private readonly ILocationRepository _locationRepository;
     private readonly IUserRepository _userRepository;

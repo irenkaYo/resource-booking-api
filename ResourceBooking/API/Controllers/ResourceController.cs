@@ -1,6 +1,6 @@
 using Infrastructure.DTO.Resource;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -8,9 +8,9 @@ namespace API.Controllers;
 [Route("api/resources")]
 public class ResourceController : ControllerBase
 {
-    private readonly ResourceService _resourceService;
+    private readonly IResourceService _resourceService;
 
-    public ResourceController(ResourceService resourceService)
+    public ResourceController(IResourceService resourceService)
     {
         _resourceService = resourceService;
     }

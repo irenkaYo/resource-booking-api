@@ -1,10 +1,11 @@
 using Domain.Models;
 using Service.DTO.Category;
 using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class CategoryService
+public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUserRepository _userRepository;

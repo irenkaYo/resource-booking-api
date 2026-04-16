@@ -3,10 +3,11 @@ using Infrastructure.DTO.Resource;
 using Microsoft.EntityFrameworkCore;
 using Service.DTO.Feature;
 using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class ResourceService
+public class ResourceService : IResourceService
 {
     private readonly IResourceRepository _resourceRepository;
     private readonly IUserRepository _userRepository;

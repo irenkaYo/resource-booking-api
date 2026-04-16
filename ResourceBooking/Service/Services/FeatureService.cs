@@ -1,10 +1,11 @@
 using Domain.Models;
 using Service.DTO.Feature;
 using Service.Interfaces.Repositories;
+using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class FeatureService
+public class FeatureService : IFeatureService
 {
     private readonly IFeatureRepository _featureRepository;
     private readonly IUserRepository _userRepository;

@@ -1,6 +1,6 @@
 using Infrastructure.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -8,9 +8,9 @@ namespace API.Controllers;
 [Route("api/bookings")]
 public class BookingController : ControllerBase
 {
-    private readonly BookingService _bookingService;
+    private readonly IBookingService _bookingService;
 
-    public BookingController(BookingService bookingService)
+    public BookingController(IBookingService bookingService)
     {
         _bookingService = bookingService;
     }

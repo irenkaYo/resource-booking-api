@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using FluentValidation;
 using Infrastructure.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -10,9 +8,9 @@ namespace API.Controllers;
 [Route("api/auth")]
 public class UserController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     
-    public UserController(UserService userService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
     }

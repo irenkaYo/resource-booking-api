@@ -5,7 +5,7 @@ using Service.Interfaces.Services;
 
 namespace Service.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IHashService _hashService;

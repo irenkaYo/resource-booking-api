@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO.Location;
-using Service.Services;
+using Service.Interfaces.Services;
 
 namespace API.Controllers;
 
@@ -8,9 +8,9 @@ namespace API.Controllers;
 [Route("api/locations")]
 public class LocationController : ControllerBase
 {
-    private readonly LocationService _locationService;
+    private readonly ILocationService _locationService;
 
-    public LocationController(LocationService locationService)
+    public LocationController(ILocationService locationService)
     {
         _locationService = locationService;   
     }
