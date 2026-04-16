@@ -41,13 +41,6 @@ public class ResourceRepository : IResourceRepository
         await db.Resources.AddAsync(resource);
         await db.SaveChangesAsync();
     }
-
-    public async Task UpdateResource(Resource resource, byte[] rowVersion)
-    {
-        db.Entry(resource).Property("RowVersion").OriginalValue = rowVersion;
-        db.Resources.Update(resource);
-        await db.SaveChangesAsync();
-    }
     
     public async Task UpdateResource(Resource resource)
     {
