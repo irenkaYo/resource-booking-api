@@ -72,7 +72,7 @@ public class ResourceController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{resourceId}/active")]
+    [HttpPost("{resourceId}/active")]
     public async Task<IActionResult> DeactivateResource(Guid resourceId, [FromHeader(Name = "X-User-Id")] Guid userId)
     {
         await _resourceService.DeactivateResource(resourceId, userId);
