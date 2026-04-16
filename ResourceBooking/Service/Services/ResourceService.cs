@@ -111,9 +111,6 @@ public class ResourceService : IResourceService
 
         var enumerable = resources.ToList();
         
-        if (!enumerable.Any())
-            throw new Exception("No resources found");
-        
         return enumerable.Select(r => ConvertResourceToResourceDto(r));
     }
 
