@@ -68,7 +68,7 @@ public class UserService
     
     private UserDto ConvertUserToUserDto(User user)
     {
-        UserDto dto = new UserDto(user.Id, user.Name, user.Email, user.Password, user.Role.ToString(), user.CreatedAt);
+        UserDto dto = new UserDto(user.Id, user.Name, user.Email, user.Role.ToString(), user.CreatedAt);
         return dto;
     }
 }
