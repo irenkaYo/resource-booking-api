@@ -59,6 +59,7 @@ public class BookingRepository : IBookingRepository
         return await db.Bookings
             .AnyAsync(b =>
                 b.ResourceId == resourceId &&
+                b.Status != BookingStatus.Canceled &&
                 b.StartTime < endTime &&
                 b.EndTime > startTime);
     }
