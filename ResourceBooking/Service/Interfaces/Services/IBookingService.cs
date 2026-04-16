@@ -8,6 +8,5 @@ public interface IBookingService
     public Task<BookingDto> GetBookingById(Guid bookingId);
     public Task<BookingDto> CreateBooking(CreateBookingDto dto);
     public Task CancelBooking(Guid bookingId, Guid userId);
-    
-    Task MarkExpiredBookingsAsCompleted();
+    public Task MarkExpiredBookingsAsCompleted();
 }

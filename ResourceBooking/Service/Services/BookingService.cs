@@ -105,13 +105,7 @@ public class BookingService : IBookingService
     public async Task MarkExpiredBookingsAsCompleted()
     {
         DateTimeOffset now = DateTimeOffset.UtcNow;
-        List<Booking> bookings = await _bookingRepository.GetExpiredBookings(now);
-
-        foreach (var booking in bookings)
-        {
-            booking.Status = BookingStatus.Completed;
-            await _bookingRepository.UpdateBooking(booking);
-        }
+        await _bookingRepository.MarkExpiredAsCompleted(now);
     }
     
     private BookingDto ConvertBookingToBookingDto(Booking booking)
