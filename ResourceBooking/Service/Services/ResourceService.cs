@@ -126,6 +126,10 @@ public class ResourceService : IResourceService
 
         if (feature == null)
             throw new Exception("Feature not found");
+        
+        var exists = await _resourceFeatureRepository.Exists(resourceId, featureId);
+        if (exists)
+            throw new Exception("Feature already added to resource");
 
         ResourceFeature resourceFeature = new ResourceFeature(resourceId, featureId);
 
