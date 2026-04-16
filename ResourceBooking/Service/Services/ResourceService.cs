@@ -70,6 +70,9 @@ public class ResourceService : IResourceService
 
         if (dto.Name != null)
             resource.Name = dto.Name;
+        
+        if (dto.Description != null)
+            resource.Description = dto.Description;
 
         if (dto.LocationId.HasValue)
             resource.LocationId = dto.LocationId.Value;
