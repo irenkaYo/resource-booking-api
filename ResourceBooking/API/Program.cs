@@ -44,7 +44,7 @@ builder.Services.AddScoped<IFeatureRepository, FeatureRepository>();
 builder.Services.AddScoped<IResourceFeatureRepository, ResourceFeatureRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IHashService, Sha256Convertation>();
+builder.Services.AddScoped<IHashService, PasswordHashService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
