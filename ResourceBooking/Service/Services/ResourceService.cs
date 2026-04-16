@@ -119,13 +119,7 @@ public class ResourceService : IResourceService
 
     public async Task<bool> IsResourceFree(Guid resourceId, DateTimeOffset startDate, DateTimeOffset endDate)
     {
-        List<Booking> bookings = await _bookingRepository.GetBookingsByResourceId(resourceId);
-        
-        var hasConflict = bookings.Any(b =>
-            b.Status != BookingStatus.Canceled &&
-            startDate < b.EndTime &&
-            endDate > b.StartTime
-        );
+        var hasConflict = await _bookingRepository.HasConflict(resourceId, startDate, endDate);
         return !hasConflict;
     }
 
