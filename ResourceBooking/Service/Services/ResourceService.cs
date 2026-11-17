@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Domain.Models;
 using Infrastructure.DTO.Resource;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Service.DTO.Feature;
 using Service.Interfaces.Repositories;
 using Service.Interfaces.Services;
@@ -14,23 +16,39 @@ public class ResourceService : IResourceService
     private readonly IBookingRepository _bookingRepository;
     private readonly IFeatureRepository _featureRepository;
     private  readonly IResourceFeatureRepository _resourceFeatureRepository;
+    private readonly IDistributedCache _cache;
+    
+    private const string AllResourcesKey = "resources:all";
+
+    private static readonly DistributedCacheEntryOptions CacheOptions = new()
+    {
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+    };
+
+    private static string ResourceKey(Guid id) => $"resource:{id}";
     
     public ResourceService(
         IResourceRepository resourceRepository, 
         IUserRepository userRepository, 
         IBookingRepository bookingRepository,
         IFeatureRepository featureRepository,
-        IResourceFeatureRepository resourceFeatureRepository)
+        IResourceFeatureRepository resourceFeatureRepository,
+        IDistributedCache cache)
     {
         _resourceRepository = resourceRepository;
         _userRepository = userRepository;
         _bookingRepository = bookingRepository;
         _featureRepository = featureRepository;
         _resourceFeatureRepository = resourceFeatureRepository;
+        _cache = cache;
     }
 
     public async Task<List<ResourceDto>> GetAllResources()
     {
+        var cached = await _cache.GetStringAsync(AllResourcesKey);
+        if (cached is not null)
+            return JsonSerializer.Deserialize<List<ResourceDto>>(cached)!;
+        
         List<Resource> resources = await _resourceRepository.GetAllResources();
         List<ResourceDto> resourceDtos = new List<ResourceDto>();
         foreach (Resource resource in resources)
@@ -38,13 +56,26 @@ public class ResourceService : IResourceService
             ResourceDto resourceDto = ConvertResourceToResourceDto(resource);
             resourceDtos.Add(resourceDto);
         }
+        
+        await _cache.SetStringAsync(AllResourcesKey, JsonSerializer.Serialize(resourceDtos), CacheOptions);
+        
         return resourceDtos;
     }
 
     public async Task<ResourceDto> GetResourceById(Guid id)
     {
+        var key = ResourceKey(id);
+        
+        var cached = await _cache.GetStringAsync(key);
+        if (cached is not null)
+            return JsonSerializer.Deserialize<ResourceDto>(cached)!;
+        
         Resource resource = await GetResource(id);
-        return ConvertResourceToResourceDto(resource);
+        ResourceDto dto = ConvertResourceToResourceDto(resource);
+        
+        await _cache.SetStringAsync(key, JsonSerializer.Serialize(dto), CacheOptions);
+
+        return dto;
     }
 
     public async Task<ResourceDto> CreateResource(CreateResourceDto resourceDto, Guid userId)
@@ -58,6 +89,7 @@ public class ResourceService : IResourceService
             resourceDto.CategoryId, 
             resourceDto.Capacity);
         await _resourceRepository.CreateResource(resource);
+        await _cache.RemoveAsync(AllResourcesKey);
         return ConvertResourceToResourceDto(resource);
     }
     
@@ -86,6 +118,7 @@ public class ResourceService : IResourceService
         try
         {
             await _resourceRepository.UpdateResource(resource);
+            await InvalidateCache(resource.Id);
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -99,7 +132,10 @@ public class ResourceService : IResourceService
         await GetAdminUser(userId);
         Resource resource = await GetResource(resourceId);
         if (!resource.IsActive)
+        {
             await _resourceRepository.DeleteResource(resource);
+            await InvalidateCache(resource.Id);
+        }
         else
             throw new Exception("Resource is already active");
     }
@@ -137,6 +173,7 @@ public class ResourceService : IResourceService
         ResourceFeature resourceFeature = new ResourceFeature(resourceId, featureId);
 
         await _resourceFeatureRepository.Add(resourceFeature);
+        await InvalidateCache(resourceId);
     }
 
     public async Task DeactivateResource(Guid resourceId, Guid userId)
@@ -145,6 +182,7 @@ public class ResourceService : IResourceService
         Resource resource = await GetResource(resourceId);
         resource.IsActive = false;
         await _resourceRepository.UpdateResource(resource);
+        await InvalidateCache(resourceId);
     }
 
     private ResourceDto ConvertResourceToResourceDto(Resource resource)
@@ -185,5 +223,11 @@ public class ResourceService : IResourceService
             throw new Exception("Resource not found");
 
         return resource;
+    }
+    
+    private async Task InvalidateCache(Guid resourceId)
+    {
+        await _cache.RemoveAsync(ResourceKey(resourceId));
+        await _cache.RemoveAsync(AllResourcesKey);
     }
 }
