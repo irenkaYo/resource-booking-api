@@ -24,6 +24,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ResourceBookingContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "ResourceBooking:";
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IBookingService, BookingService>();
